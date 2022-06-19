@@ -65,11 +65,11 @@ die auch noch nicht :)
 Alternativen zu Pollin: Reichelt Elektronik, Conrad electronics
 ### Programmieren
 - Programmier-Adapter ("progammer") ST-Link V2 (eBay)
-Foto:
-<img src="https://github.com/kokospalme/P13_Luftmesser/blob/main/Bilder/ST%20Link%20programmer.png" height="60" width="60" >
+##### Foto:
+<img src="https://github.com/kokospalme/P13_Luftmesser/blob/main/Bilder/ST%20Link%20programmer.png">
 
-...oder billig-Clon (kann dann nur STM8, nicht STM32 programmieren!):
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+##### ...oder billig-Clon (kann dann nur STM8, nicht STM32 programmieren!):
+<img src="https://github.com/kokospalme/P13_Luftmesser/blob/main/Bilder/clone%20STlinkv2.png">
 
 
 
