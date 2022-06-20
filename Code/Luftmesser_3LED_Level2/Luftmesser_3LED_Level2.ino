@@ -1,6 +1,9 @@
 /*
- * Luftmessgerät version 1
+ * Projekt Luftmessgerät version 1
  * Level 2
+ * C. Wüpping, 2022
+ * Das gesamte Projekt inkl. Code unterliegt der Creative Common Lizenz CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/deed.de)
+ * 
  */
  
 /*** PINS ***/

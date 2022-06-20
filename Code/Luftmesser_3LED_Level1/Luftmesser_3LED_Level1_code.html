@@ -1,55 +1,62 @@
 <pre>
 <font color="#95a5a6">&#47;*</font>
-<font color="#95a5a6"> * Luftmessgerät version 1</font>
+<font color="#95a5a6"> * Projekt Luftmessgerät version 1</font>
 <font color="#95a5a6"> * Level 1</font>
+<font color="#95a5a6"> * C. Wüpping, 2022</font>
+<font color="#95a5a6"> * Das gesamte Projekt inkl. Code unterliegt der Creative Common Lizenz CC BY-NC 4.0 (</font><u><font color="#95a5a6">https:&#47;&#47;creativecommons.org&#47;licenses&#47;by-nc&#47;4.0&#47;deed.de</font></u><font color="#95a5a6">)</font>
+<font color="#95a5a6"> * </font>
 <font color="#95a5a6"> *&#47;</font>
+
 <font color="#95a5a6">&#47;*** PINS ***&#47;</font>
-<font color="#5e6d03">#define</font> <font color="#000000">SENSOR_PIN</font> <font color="#000000">A3</font> &nbsp;<font color="#434f54">&#47;&#47; Sensor (MQ 135)</font>
-<font color="#5e6d03">#define</font> <font color="#000000">LED1_PIN</font> <font color="#000000">D3</font> &nbsp;<font color="#434f54">&#47;&#47; LED noch gut (grün)</font>
-<font color="#5e6d03">#define</font> <font color="#000000">LED2_PIN</font> <font color="#000000">D1</font> &nbsp;<font color="#434f54">&#47;&#47; LED geht so (gelb)</font>
-<font color="#5e6d03">#define</font> <font color="#000000">LED3_PIN</font> <font color="#000000">C6</font> &nbsp;<font color="#434f54">&#47;&#47; LED nicht OK (rot)</font>
+
+<font color="#5e6d03">#define</font> <font color="#000000">SENSOR_PIN</font> <font color="#000000">6</font> &nbsp;<font color="#434f54">&#47;&#47; Sensor (MQ 135), Pin C4</font>
+<font color="#5e6d03">#define</font> <font color="#000000">LED1_PIN</font> <font color="#000000">0</font> &nbsp;<font color="#434f54">&#47;&#47; LED noch gut (grün), Pin A1</font>
+<font color="#5e6d03">#define</font> <font color="#000000">LED2_PIN</font> <font color="#000000">1</font> &nbsp;<font color="#434f54">&#47;&#47; LED geht so (gelb), Pin A2</font>
+<font color="#5e6d03">#define</font> <font color="#000000">LED3_PIN</font> <font color="#000000">2</font> &nbsp;<font color="#434f54">&#47;&#47; LED nicht OK (rot), Pin A3</font>
 
 <font color="#95a5a6">&#47;*** Kalibrierung **&#47;</font>
 <font color="#5e6d03">#define</font> <font color="#000000">INTERVALL</font> <font color="#000000">500</font> <font color="#434f54">&#47;&#47; alle x Millisekunden messen</font>
-<font color="#5e6d03">#define</font> <font color="#000000">PREHEAT_ZEIT</font> <font color="#000000">15000</font> <font color="#434f54">&#47;&#47; warte x Millisekunden bevor gemessen wird</font>
-<font color="#5e6d03">#define</font> <font color="#000000">PREHEAT_BLINKZEIT</font> <font color="#000000">1000</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47; Zeit zum Blinken</font>
 
-<font color="#5e6d03">#define</font> <font color="#000000">LEVEL_2</font> <font color="#000000">205</font> <font color="#434f54">&#47;&#47; ab x Level gut</font>
-<font color="#5e6d03">#define</font> <font color="#000000">LEVEL_3</font> <font color="#000000">410</font> <font color="#434f54">&#47;&#47; ab x Level ok</font>
-<font color="#5e6d03">#define</font> <font color="#000000">LEVEL_4</font> <font color="#000000">615</font> <font color="#434f54">&#47;&#47; ab x Level naja</font>
+<font color="#5e6d03">#define</font> <font color="#000000">LEVEL_2</font> <font color="#000000">200</font> <font color="#434f54">&#47;&#47; ab x Level 2: &#34;naja&#34;</font>
+<font color="#5e6d03">#define</font> <font color="#000000">LEVEL_3</font> <font color="#000000">500</font> <font color="#434f54">&#47;&#47; ab x Level 3: &#34;schlecht&#47;Gefahr&#34;</font>
+
+<font color="#95a5a6">&#47;*** Variablen ***&#47;</font>
+<font color="#00979c">int</font> <font color="#000000">luftverschmutzung</font><font color="#000000">;</font>
 
 <font color="#00979c">void</font> <font color="#5e6d03">setup</font><font color="#000000">(</font><font color="#000000">)</font> <font color="#000000">{</font> &nbsp;<font color="#434f54">&#47;&#47; läuft einmal durch</font>
- &nbsp;<font color="#d35400">pinMode</font><font color="#000000">(</font><font color="#000000">Sensor_PIN</font><font color="#434f54">,</font> <font color="#00979c">INPUT</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47; Sensor-pin &nbsp;= input</font>
+ &nbsp;<font color="#000000">Serial_begin</font><font color="#000000">(</font><font color="#000000">9600</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;Serial communication</font>
+ &nbsp;<font color="#000000">Serial_print_s</font><font color="#000000">(</font><font color="#005c5f">&#34;Luftmessgerät booting&#34;</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;<font color="#434f54">&#47;&#47;schreibe Zeile beim Booten</font>
+ &nbsp;<font color="#000000">Serial_print_s</font><font color="#000000">(</font><font color="#005c5f">&#34;\n&#34;</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;
+ &nbsp;<font color="#d35400">pinMode</font><font color="#000000">(</font><font color="#000000">SENSOR_PIN</font><font color="#434f54">,</font> <font color="#00979c">INPUT</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47; Sensor-pin &nbsp;= input</font>
 
  &nbsp;<font color="#d35400">pinMode</font><font color="#000000">(</font><font color="#000000">LED1_PIN</font><font color="#434f54">,</font> <font color="#00979c">OUTPUT</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;<font color="#434f54">&#47;&#47; LED1 = output</font>
  &nbsp;<font color="#d35400">pinMode</font><font color="#000000">(</font><font color="#000000">LED2_PIN</font><font color="#434f54">,</font> <font color="#00979c">OUTPUT</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;<font color="#434f54">&#47;&#47; LED2 = output</font>
  &nbsp;<font color="#d35400">pinMode</font><font color="#000000">(</font><font color="#000000">LED3_PIN</font><font color="#434f54">,</font> <font color="#00979c">OUTPUT</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;<font color="#434f54">&#47;&#47; LED3 = output</font>
 
- &nbsp;<font color="#5e6d03">while</font><font color="#000000">(</font><font color="#d35400">millis</font><font color="#000000">(</font><font color="#000000">)</font> <font color="#434f54">&lt;</font> <font color="#000000">PREHEAT_ZEIT</font><font color="#000000">)</font><font color="#000000">{</font> <font color="#434f54">&#47;&#47;warte bis Sensor startklar ist und blinke dabei mit LED1</font>
- &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED1_PIN</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;LED1 an</font>
- &nbsp;&nbsp;&nbsp;<font color="#d35400">delay</font><font color="#000000">(</font><font color="#000000">PREHEAT_BLINKZEIT</font><font color="#000000">)</font><font color="#000000">;</font>
- &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED1_PIN</font><font color="#434f54">,</font> <font color="#00979c">LOW</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;LED1 aus</font>
- &nbsp;&nbsp;&nbsp;<font color="#d35400">delay</font><font color="#000000">(</font><font color="#000000">PREHEAT_BLINKZEIT</font><font color="#000000">)</font><font color="#000000">;</font>
- &nbsp;<font color="#000000">}</font>
-
 <font color="#000000">}</font>
 
 <font color="#00979c">void</font> <font color="#5e6d03">loop</font><font color="#000000">(</font><font color="#000000">)</font> <font color="#000000">{</font> <font color="#434f54">&#47;&#47;läuft immer wieder durch</font>
 
+ &nbsp;<font color="#000000">luftverschmutzung</font> <font color="#434f54">=</font> <font color="#d35400">analogRead</font><font color="#000000">(</font><font color="#000000">SENSOR_PIN</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;
  &nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED1_PIN</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;LED1 an</font>
  &nbsp;
- &nbsp;<font color="#5e6d03">if</font><font color="#000000">(</font><font color="#000000">mittelwert</font> <font color="#434f54">&gt;=</font> <font color="#000000">LEVEL_2</font><font color="#000000">)</font><font color="#000000">{</font> &nbsp;<font color="#434f54">&#47;&#47; LED2 ab Level 2 an</font>
- &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED2_PIN</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#5e6d03">if</font><font color="#000000">(</font><font color="#000000">luftverschmutzung</font> <font color="#434f54">&gt;=</font> <font color="#000000">LEVEL_2</font><font color="#000000">)</font><font color="#000000">{</font> &nbsp;<font color="#434f54">&#47;&#47; LED2 ab Level 2 an</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED2_PIN</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;<font color="#434f54">&#47;&#47;Low und high vertauscht (nur bei STM8!)</font>
  &nbsp;<font color="#000000">}</font><font color="#5e6d03">else</font><font color="#000000">{</font> &nbsp;<font color="#434f54">&#47;&#47;sonst LED2 aus</font>
- &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED2_PIN</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED2_PIN</font><font color="#434f54">,</font> <font color="#00979c">LOW</font><font color="#000000">)</font><font color="#000000">;</font>
  &nbsp;<font color="#000000">}</font>
  &nbsp;
- &nbsp;<font color="#5e6d03">if</font><font color="#000000">(</font><font color="#000000">mittelwert</font> <font color="#434f54">&gt;=</font> <font color="#000000">LEVEL_3</font><font color="#000000">)</font><font color="#000000">{</font> &nbsp;<font color="#434f54">&#47;&#47; LED3 ab Level 3 an</font>
+ &nbsp;<font color="#5e6d03">if</font><font color="#000000">(</font><font color="#000000">luftverschmutzung</font> <font color="#434f54">&gt;=</font> <font color="#000000">LEVEL_3</font><font color="#000000">)</font><font color="#000000">{</font> &nbsp;<font color="#434f54">&#47;&#47; LED3 ab Level 3 an</font>
  &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED3_PIN</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font>
  &nbsp;<font color="#000000">}</font><font color="#5e6d03">else</font><font color="#000000">{</font> &nbsp;<font color="#434f54">&#47;&#47;sonst LED3 aus</font>
- &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED3_PIN</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED3_PIN</font><font color="#434f54">,</font> <font color="#00979c">LOW</font><font color="#000000">)</font><font color="#000000">;</font>
  &nbsp;<font color="#000000">}</font>
 
+ &nbsp;<font color="#000000">Serial_print_u</font><font color="#000000">(</font><font color="#000000">luftverschmutzung</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;<font color="#434f54">&#47;&#47;gebe Sensorwert über Serielle Schnittstelle aus (Pin TX&#47;PD5)</font>
+ &nbsp;<font color="#000000">Serial_print_s</font><font color="#000000">(</font><font color="#005c5f">&#34;\n&#34;</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;
  &nbsp;<font color="#d35400">delay</font><font color="#000000">(</font><font color="#000000">INTERVALL</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;&nbsp;<font color="#434f54">&#47;&#47;warte x Millisekunden</font>
  &nbsp;
 <font color="#000000">}</font> &nbsp;<font color="#434f54">&#47;&#47;Ende des Loops</font>
