@@ -2,6 +2,7 @@
 # Projekt Luftmesser
 
 Unterlagen zum Projekt "Luftmesser" (v1.0)
+##### Alle Daten unterliegen der Creative Common Lizenz CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/)
 ##### <img src="https://github.com/kokospalme/P13_Luftmesser/blob/main/Bilder/QR.png"  height = "150" width = "150" >
 
 ## Lerninhalte
