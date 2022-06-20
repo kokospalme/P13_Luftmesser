@@ -2,7 +2,7 @@
 # Projekt Luftmesser
 
 Unterlagen zum Projekt "Luftmesser" (v1.0)
-<img src="https://github.com/kokospalme/P13_Luftmesser/blob/main/Bilder/QR.png"  height = "100" width = "100" >
+##### <img src="https://github.com/kokospalme/P13_Luftmesser/blob/main/Bilder/QR.png"  height = "150" width = "150" >
 
 ## Lerninhalte
 
