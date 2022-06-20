@@ -64,6 +64,9 @@ die auch noch nicht :)
 - 2x Widerstand 100kOhm (Sortiment Pollin)
 - ca. 10 cm Kabellitze (eBay, Pollin)
 Alternativen zu Pollin: Reichelt Elektronik, Conrad electronics
+- 1x Case (4-Teilig): https://github.com/kokospalme/P13_Luftmesser/tree/main/Case%20v5
+- 6x Schrauben 3x4mm (Metrisch geht auch)
+
 ### Programmieren
 - Programmier-Adapter ("progammer") ST-Link V2 (eBay)
 ##### Foto:
