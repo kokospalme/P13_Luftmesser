@@ -2,7 +2,7 @@
 # Projekt Luftmesser
 
 Unterlagen zum Projekt "Luftmesser" (v1.0)
-
+<img src="https://github.com/kokospalme/P13_Luftmesser/blob/main/Bilder/QR.png",  height = "100",width = "100" >
 
 ## Lerninhalte
 
@@ -70,8 +70,3 @@ Alternativen zu Pollin: Reichelt Elektronik, Conrad electronics
 
 ##### ...oder billig-Clon (kann dann nur STM8, nicht STM32 programmieren!):
 <img src="https://github.com/kokospalme/P13_Luftmesser/blob/main/Bilder/clone%20STlinkv2.png">
-
-
-
-
-
