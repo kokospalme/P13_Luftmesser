@@ -2,7 +2,7 @@
 # Projekt Luftmesser
 
 Unterlagen zum Projekt "Luftmesser" (v1.0), C. Wüpping, 2022
-##### Das gesamte Projekt inkl. Code unterliegt der Creative Common Lizenz CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/)
+##### Das gesamte Projekt inkl. Code unterliegt der Creative Common Lizenz CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/deed.de)
 ##### <img src="https://github.com/kokospalme/P13_Luftmesser/blob/main/Bilder/QR.png"  height = "150" width = "150" >
 
 ## Lerninhalte
