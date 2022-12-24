@@ -1,0 +1,81 @@
+<pre>
+<font color="#95a5a6">&#47;*</font>
+<font color="#95a5a6"> * Projekt Luftmessgerät version 1, Gerät A1</font>
+<font color="#95a5a6"> * Level 2</font>
+<font color="#95a5a6"> * C. Wüpping, 2022</font>
+<font color="#95a5a6"> * Das gesamte Projekt inkl. Code unterliegt der Creative Common Lizenz CC BY-NC 4.0 (</font><u><font color="#95a5a6">https:&#47;&#47;creativecommons.org&#47;licenses&#47;by-nc&#47;4.0&#47;deed.de</font></u><font color="#95a5a6">)</font>
+<font color="#95a5a6"> * </font>
+<font color="#95a5a6"> *&#47;</font>
+
+<font color="#95a5a6">&#47;*** PINS ***&#47;</font>
+
+<font color="#5e6d03">#define</font> <font color="#000000">SENSOR_PIN</font> <font color="#000000">A0</font> &nbsp;<font color="#434f54">&#47;&#47; Sensor (MQ 135), &nbsp;&nbsp;&nbsp;Pin D6&#47;A0 (software), PC4 (hardware)</font>
+<font color="#5e6d03">#define</font> <font color="#000000">LED1_PIN</font> <font color="#000000">14</font> &nbsp;<font color="#434f54">&#47;&#47; LED noch gut (grün), &nbsp;Pin D13 (sfotware), &nbsp;&nbsp;PD5 (hardware)</font>
+<font color="#5e6d03">#define</font> <font color="#000000">LED2_PIN</font> <font color="#000000">1</font> &nbsp;<font color="#434f54">&#47;&#47; LED geht so (gelb), &nbsp;&nbsp;&nbsp;Pin D1 (software), &nbsp;&nbsp;&nbsp;PA2 (hardware)</font>
+<font color="#5e6d03">#define</font> <font color="#000000">LED3_PIN</font> <font color="#000000">2</font> &nbsp;<font color="#434f54">&#47;&#47; LED nicht OK (rot), &nbsp;&nbsp;&nbsp;Pin D1(software), &nbsp;&nbsp;&nbsp;&nbsp;PA3 (hardware)</font>
+
+<font color="#95a5a6">&#47;*** Kalibrierung **&#47;</font>
+<font color="#5e6d03">#define</font> <font color="#000000">ANZAHL_MESSUNGEN</font> <font color="#000000">10</font> <font color="#434f54">&#47;&#47;Anzahl x der Messungen für Mittelwert</font>
+<font color="#5e6d03">#define</font> <font color="#000000">INTERVALL</font> <font color="#000000">500</font> <font color="#434f54">&#47;&#47; alle x Millisekunden messen</font>
+<font color="#5e6d03">#define</font> <font color="#000000">PREHEAT_ZEIT</font> <font color="#000000">30000</font> <font color="#434f54">&#47;&#47; warte x Millisekunden bevor gemessen wird</font>
+<font color="#5e6d03">#define</font> <font color="#000000">PREHEAT_BLINKZEIT</font> <font color="#000000">200</font> <font color="#434f54">&#47;&#47; Zeit zum Blinken</font>
+
+<font color="#5e6d03">#define</font> <font color="#000000">LEVEL_2</font> <font color="#000000">200</font> <font color="#434f54">&#47;&#47; ab x Level ok</font>
+<font color="#5e6d03">#define</font> <font color="#000000">LEVEL_3</font> <font color="#000000">500</font> <font color="#434f54">&#47;&#47; ab x Level shclecht</font>
+
+<font color="#95a5a6">&#47;*** Variablen ***&#47;</font>
+<font color="#00979c">int</font> <font color="#000000">messungen</font><font color="#000000">[</font><font color="#000000">ANZAHL_MESSUNGEN</font><font color="#000000">]</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47; x &#34;container&#34; für Messungen (so viel wie Anzahl der Messungen) --&gt; Array</font>
+<font color="#00979c">int</font> <font color="#000000">mittelwert</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47; &#34;container&#34; für Mittelwert --&gt; Variable des Typs &#39;int&#39;</font>
+
+<font color="#00979c">void</font> <font color="#5e6d03">setup</font><font color="#000000">(</font><font color="#000000">)</font> <font color="#000000">{</font> &nbsp;<font color="#434f54">&#47;&#47; läuft einmal durch</font>
+ &nbsp;<font color="#d35400">pinMode</font><font color="#000000">(</font><font color="#000000">SENSOR_PIN</font><font color="#434f54">,</font> <font color="#00979c">INPUT</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47; Sensor-pin &nbsp;= input</font>
+
+ &nbsp;<font color="#d35400">pinMode</font><font color="#000000">(</font><font color="#000000">LED1_PIN</font><font color="#434f54">,</font> <font color="#00979c">OUTPUT</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;<font color="#434f54">&#47;&#47; LED1 = output</font>
+ &nbsp;<font color="#d35400">pinMode</font><font color="#000000">(</font><font color="#000000">LED2_PIN</font><font color="#434f54">,</font> <font color="#00979c">OUTPUT</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;<font color="#434f54">&#47;&#47; LED2 = output</font>
+ &nbsp;<font color="#d35400">pinMode</font><font color="#000000">(</font><font color="#000000">LED3_PIN</font><font color="#434f54">,</font> <font color="#00979c">OUTPUT</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;<font color="#434f54">&#47;&#47; LED3 = output</font>
+
+
+
+<font color="#5e6d03">for</font><font color="#000000">(</font><font color="#00979c">int</font> <font color="#000000">i</font> <font color="#434f54">=</font> <font color="#000000">0</font><font color="#000000">;</font> <font color="#000000">i</font> <font color="#434f54">&lt;</font> <font color="#000000">100</font><font color="#000000">;</font> <font color="#000000">i</font><font color="#434f54">++</font><font color="#000000">)</font><font color="#000000">{</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED1_PIN</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;LED1 an</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED2_PIN</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;LED2 an</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED3_PIN</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;LED3 an</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">delay</font><font color="#000000">(</font><font color="#000000">PREHEAT_BLINKZEIT</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED1_PIN</font><font color="#434f54">,</font> <font color="#00979c">LOW</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;LED1 aus</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED2_PIN</font><font color="#434f54">,</font> <font color="#00979c">LOW</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;LED2 an</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED3_PIN</font><font color="#434f54">,</font> <font color="#00979c">LOW</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;LED3 an</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">delay</font><font color="#000000">(</font><font color="#000000">PREHEAT_BLINKZEIT</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;
+<font color="#000000">}</font>
+
+<font color="#000000">}</font>
+
+<font color="#00979c">void</font> <font color="#5e6d03">loop</font><font color="#000000">(</font><font color="#000000">)</font> <font color="#000000">{</font> <font color="#434f54">&#47;&#47;läuft immer wieder durch</font>
+ &nbsp;
+ &nbsp;<font color="#5e6d03">for</font><font color="#000000">(</font><font color="#00979c">int</font> <font color="#000000">i</font> <font color="#434f54">=</font> <font color="#000000">0</font><font color="#000000">;</font> <font color="#000000">i</font> <font color="#434f54">&lt;</font> <font color="#000000">ANZAHL_MESSUNGEN</font><font color="#000000">;</font> <font color="#000000">i</font><font color="#434f54">++</font><font color="#000000">)</font><font color="#000000">{</font> &nbsp;<font color="#434f54">&#47;&#47; Wiederhole eine Messung, solange i kleiner der Anzahl der Messungen ist, i wird hochgezählt --&gt; &#39;i++&#39;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">messungen</font><font color="#000000">[</font><font color="#000000">i</font><font color="#000000">]</font> <font color="#434f54">=</font> <font color="#d35400">analogRead</font><font color="#000000">(</font><font color="#000000">SENSOR_PIN</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;<font color="#434f54">&#47;&#47; schreibe in Container 0, 1, 2, 3 ... 9 die Messungen (analogRead gibt Werte zwischen 0 und 1023 aus)</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">mittelwert</font> <font color="#434f54">=</font> <font color="#000000">mittelwert</font> <font color="#434f54">+</font> <font color="#000000">messungen</font><font color="#000000">[</font><font color="#000000">i</font><font color="#000000">]</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47; addiere zum vorhandenen Mittelwert die Messung 0, 1, 2, 3 ... 9</font>
+ &nbsp;<font color="#000000">}</font>
+ &nbsp;<font color="#000000">mittelwert</font> <font color="#434f54">=</font> <font color="#000000">mittelwert</font> <font color="#434f54">&#47;</font> <font color="#000000">ANZAHL_MESSUNGEN</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47; dividiere alle addierten Werte durch Anzahl --&gt; Mittelwert ist berechnet</font>
+
+
+ &nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED1_PIN</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font> <font color="#434f54">&#47;&#47;LED1 an</font>
+ &nbsp;
+ &nbsp;<font color="#5e6d03">if</font><font color="#000000">(</font><font color="#000000">mittelwert</font> <font color="#434f54">&gt;=</font> <font color="#000000">LEVEL_2</font><font color="#000000">)</font><font color="#000000">{</font> &nbsp;<font color="#434f54">&#47;&#47; LED2 ab Level 2 an</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED2_PIN</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;<font color="#434f54">&#47;&#47;Low und high vertauscht (nur bei STM8!)</font>
+ &nbsp;<font color="#000000">}</font><font color="#5e6d03">else</font><font color="#000000">{</font> &nbsp;<font color="#434f54">&#47;&#47;sonst LED2 aus</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED2_PIN</font><font color="#434f54">,</font> <font color="#00979c">LOW</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#000000">}</font>
+ &nbsp;
+ &nbsp;<font color="#5e6d03">if</font><font color="#000000">(</font><font color="#000000">mittelwert</font> <font color="#434f54">&gt;=</font> <font color="#000000">LEVEL_3</font><font color="#000000">)</font><font color="#000000">{</font> &nbsp;<font color="#434f54">&#47;&#47; LED3 ab Level 3 an</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED3_PIN</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#000000">}</font><font color="#5e6d03">else</font><font color="#000000">{</font> &nbsp;<font color="#434f54">&#47;&#47;sonst LED3 aus</font>
+ &nbsp;&nbsp;&nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">LED3_PIN</font><font color="#434f54">,</font> <font color="#00979c">LOW</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#000000">}</font>
+
+ &nbsp;
+ &nbsp;<font color="#d35400">delay</font><font color="#000000">(</font><font color="#000000">INTERVALL</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;&nbsp;<font color="#434f54">&#47;&#47;warte x Millisekunden</font>
+ &nbsp;
+<font color="#000000">}</font> &nbsp;<font color="#434f54">&#47;&#47;Ende des Loops</font>
+
+</pre>
